@@ -1,0 +1,19 @@
+{
+  "name": "Casa de Campo en Texas",
+  "description": "Mansión histórica con 50 acres de terreno",
+  "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500",
+  "attributes": [
+    {
+      "trait_type": "Habitaciones",
+      "value": 8
+    },
+    {
+      "trait_type": "Precio",
+      "value": "$1,800,000"
+    },
+    {
+      "trait_type": "Ubicación",
+      "value": "Texas"
+    }
+  ]
+}

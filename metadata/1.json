@@ -1,0 +1,19 @@
+{
+  "name": "Apartamento Moderno en NYC",
+  "description": "Penthouse en Manhattan con vista increíble",
+  "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500",
+  "attributes": [
+    {
+      "trait_type": "Habitaciones",
+      "value": 3
+    },
+    {
+      "trait_type": "Precio",
+      "value": "$3,200,000"
+    },
+    {
+      "trait_type": "Ubicación",
+      "value": "Nueva York"
+    }
+  ]
+}

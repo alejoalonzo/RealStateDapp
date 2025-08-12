@@ -1,0 +1,19 @@
+{
+  "name": "Villa de Lujo en Miami",
+  "description": "Hermosa villa frente al mar con 5 habitaciones",
+  "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500",
+  "attributes": [
+    {
+      "trait_type": "Habitaciones",
+      "value": 5
+    },
+    {
+      "trait_type": "Precio",
+      "value": "$2,500,000"
+    },
+    {
+      "trait_type": "Ubicación",
+      "value": "Miami"
+    }
+  ]
+}
