@@ -1,5 +1,8 @@
 import Image from "next/image";
 
-export default function Home() {
-  return <div>Real Estate</div>;
+//INTERNAL IMPORTS
+import { Home } from "@/components";
+
+export default function HomePage() {
+  return <Home />;
 }
