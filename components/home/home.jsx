@@ -3,7 +3,6 @@ import Image from "next/image";
 import HeroText from './heroText/heroText';
 import HeroImage from './heroImage/heroImage';
 
-
 const Home = () => {
   return (
     <div className="min-h-screen bg-bg-primary">

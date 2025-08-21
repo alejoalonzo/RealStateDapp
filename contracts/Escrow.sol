@@ -13,7 +13,25 @@ contract Escrow {
     address payable public seller;
     address public inspector;
     address public lender;
+    //*******************User Accounts *******************/
+    struct user {
+        string username;
+        string lastName;
+        string email;
+    }
 
+    struct allUserStruct {
+        string name;
+        string lastName;
+        string email;
+        address accountAddress;
+    }
+
+    allUserStruct[] getAllUsers;
+
+    mapping(address => user) userList;
+
+    //*******************Transfers *******************/
     modifier onlyBuyer(uint256 _nftId) {
         require(
             msg.sender == buyer[_nftId],
@@ -56,6 +74,76 @@ contract Escrow {
         lender = _lender;
     }
 
+    //*******************User Accounts *******************/
+
+    // Evento para notificar la creación de usuario
+    event UserCreated(
+        address indexed user,
+        string username,
+        string lastName,
+        string email
+    );
+
+    //Check User Existence
+    function userExists(address _user) public view returns (bool) {
+        return bytes(userList[_user].username).length > 0;
+    }
+
+    //Create Account
+    function createAccount(
+        string calldata _username,
+        string calldata _lastName,
+        string calldata _email
+    ) external {
+        require(!userExists(msg.sender), "User already exists");
+        //username cannot be empty
+        require(bytes(_username).length > 0, "Username cannot be empty");
+        require(bytes(_lastName).length > 0, "Last name cannot be empty");
+        require(bytes(_email).length > 0, "Email cannot be empty");
+
+        userList[msg.sender].username = _username;
+        userList[msg.sender].lastName = _lastName;
+        userList[msg.sender].email = _email;
+
+        getAllUsers.push(
+            allUserStruct(_username, _lastName, _email, msg.sender)
+        );
+        emit UserCreated(msg.sender, _username, _lastName, _email);
+    }
+
+    //Get UserName
+    function getUserName(address _user) external view returns (string memory) {
+        require(userExists(_user), "User does not exist");
+        return userList[_user].username;
+    }
+
+    //Get User Last Name
+    function getUserLastName(
+        address _user
+    ) external view returns (string memory) {
+        require(userExists(_user), "User does not exist");
+        return userList[_user].lastName;
+    }
+
+    //Get User Email
+    function getUserEmail(address _user) external view returns (string memory) {
+        require(userExists(_user), "User does not exist");
+        return userList[_user].email;
+    }
+
+    //Get Complete User Info
+    function getUserInfo(
+        address _user
+    ) external view returns (string memory, string memory, string memory) {
+        require(userExists(_user), "User does not exist");
+        return (
+            userList[_user].username,
+            userList[_user].lastName,
+            userList[_user].email
+        );
+    }
+
+    //*******************Transfers *******************/
     function list(
         uint256 _nftId,
         address _buyer,

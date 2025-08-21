@@ -1,7 +1,7 @@
 "use client";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import { HiMenu } from "react-icons/hi";
 import Image from "next/image";
+import User from "../user/user"; 
 
 const Header = () => {
   return (
@@ -21,18 +21,11 @@ const Header = () => {
 
         {/* Icons Container */}
         <div className="flex items-center space-x-4">
-          {/* Map Icon */}
+          {/* User Photo/Icon Circle */}
+          <User />
+          {/* Hamburger Menu Icon - Circular Background */}
           <button 
-            className="p-3 rounded-lg transition-all duration-200 hover:opacity-80"
-            style={{ backgroundColor: '#D6E7EF' }}
-            aria-label="Mapa de propiedades"
-          >
-            <FaMapMarkerAlt className="w-5 h-5 text-text-primary" />
-          </button>
-
-          {/* Hamburger Menu Icon */}
-          <button 
-            className="p-3 rounded-lg transition-all duration-200 hover:opacity-80"
+            className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:opacity-80"
             style={{ backgroundColor: '#D6E7EF' }}
             aria-label="Menú"
           >

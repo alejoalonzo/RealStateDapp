@@ -277,4 +277,117 @@ describe("Escrow", function () {
       });
     });
   });
+
+  describe("User Account Management", () => {
+    describe("Create Account", () => {
+      it("Should create a new user account with all required fields", async () => {
+        const username = "Juan";
+        const lastName = "Pérez";
+        const email = "juan.perez@email.com";
+
+        // Create account
+        const transaction = await escrow
+          .connect(buyer)
+          .createAccount(username, lastName, email);
+        await transaction.wait();
+
+        // Verify user exists
+        expect(await escrow.userExists(buyer.address)).to.be.true;
+
+        // Verify user data
+        expect(await escrow.getUserName(buyer.address)).to.equal(username);
+        expect(await escrow.getUserLastName(buyer.address)).to.equal(lastName);
+        expect(await escrow.getUserEmail(buyer.address)).to.equal(email);
+
+        // Verify complete user info
+        const userInfo = await escrow.getUserInfo(buyer.address);
+        expect(userInfo[0]).to.equal(username);
+        expect(userInfo[1]).to.equal(lastName);
+        expect(userInfo[2]).to.equal(email);
+      });
+
+      it("Should emit UserCreated event when account is created", async () => {
+        const username = "María";
+        const lastName = "González";
+        const email = "maria.gonzalez@email.com";
+
+        // Expect the UserCreated event to be emitted
+        await expect(
+          escrow.connect(seller).createAccount(username, lastName, email)
+        )
+          .to.emit(escrow, "UserCreated")
+          .withArgs(seller.address, username, lastName, email);
+      });
+
+      it("Should not allow creating account with empty username", async () => {
+        await expect(
+          escrow.connect(buyer).createAccount("", "Pérez", "juan@email.com")
+        ).to.be.revertedWith("Username cannot be empty");
+      });
+
+      it("Should not allow creating account with empty last name", async () => {
+        await expect(
+          escrow.connect(buyer).createAccount("Juan", "", "juan@email.com")
+        ).to.be.revertedWith("Last name cannot be empty");
+      });
+
+      it("Should not allow creating account with empty email", async () => {
+        await expect(
+          escrow.connect(buyer).createAccount("Juan", "Pérez", "")
+        ).to.be.revertedWith("Email cannot be empty");
+      });
+
+      it("Should not allow duplicate accounts for same address", async () => {
+        // Create first account
+        await escrow
+          .connect(buyer)
+          .createAccount("Juan", "Pérez", "juan@email.com");
+
+        // Try to create another account with same address
+        await expect(
+          escrow
+            .connect(buyer)
+            .createAccount("Pedro", "García", "pedro@email.com")
+        ).to.be.revertedWith("User already exists");
+      });
+
+      it("Should allow multiple different addresses to create accounts", async () => {
+        // Create account for buyer
+        await escrow
+          .connect(buyer)
+          .createAccount("Juan", "Pérez", "juan@email.com");
+
+        // Create account for inspector
+        await escrow
+          .connect(inspector)
+          .createAccount("María", "González", "maria@email.com");
+
+        // Verify both accounts exist
+        expect(await escrow.userExists(buyer.address)).to.be.true;
+        expect(await escrow.userExists(inspector.address)).to.be.true;
+
+        // Verify account data
+        expect(await escrow.getUserName(buyer.address)).to.equal("Juan");
+        expect(await escrow.getUserName(inspector.address)).to.equal("María");
+      });
+
+      it("Should revert when trying to get info of non-existent user", async () => {
+        await expect(escrow.getUserName(buyer.address)).to.be.revertedWith(
+          "User does not exist"
+        );
+
+        await expect(escrow.getUserLastName(buyer.address)).to.be.revertedWith(
+          "User does not exist"
+        );
+
+        await expect(escrow.getUserEmail(buyer.address)).to.be.revertedWith(
+          "User does not exist"
+        );
+
+        await expect(escrow.getUserInfo(buyer.address)).to.be.revertedWith(
+          "User does not exist"
+        );
+      });
+    });
+  });
 });
