@@ -26,8 +26,10 @@ const Login = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí manejarás la lógica de login/signup
+    // Aquí manejarás la lógica de login/signup tradicional
     console.log("Form submitted:", formData);
+    // Por ahora solo cerramos el modal
+    onClose();
   };
 
   return (

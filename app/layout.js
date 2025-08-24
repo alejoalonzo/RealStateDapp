@@ -1,5 +1,6 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { RealEstateProvider } from "@/context/RealEstateContext";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -16,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body className={`${poppins.variable} font-sans antialiased`}>
-        {children}
+        <RealEstateProvider>{children}</RealEstateProvider>
       </body>
     </html>
   );

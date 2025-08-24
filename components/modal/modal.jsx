@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from 'react';
 import Image from 'next/image';
+import ClientOnly from '../ClientOnly';
 
 const Modal = ({ 
   isOpen, 
@@ -61,32 +62,142 @@ const Modal = ({
   };
 
   return (
-    <div 
-      className="fixed inset-0 flex items-center justify-center p-4"
-      style={{ zIndex: 1000, backgroundColor: '#dee1e7' }}
-      onClick={handleOverlayClick}
-    >
+    <ClientOnly>
       <div 
-        className={`
-          bg-white 
-          rounded-2xl 
-          shadow-lg 
-          ${getMaxWidth()}
-          ${getHeight()}
-          overflow-hidden
-          transition-all 
-          duration-300 
-          ease-out
-          animate-fadeInScale
-          ${withImage ? 'flex' : 'flex flex-col'}
-        `}
-        onClick={(e) => e.stopPropagation()}
+        className="fixed inset-0 flex items-center justify-center p-4"
+        style={{ zIndex: 1000, backgroundColor: '#dee1e7' }}
+        onClick={handleOverlayClick}
       >
-        {withImage ? (
-          // Layout con imagen (tablet/laptop)
-          <div className="hidden md:flex w-full h-full">
-            {/* Columna izquierda - Contenido */}
-            <div className="w-[425px] flex flex-col">
+        <div 
+          className={`
+            bg-white 
+            rounded-2xl 
+            shadow-lg 
+            ${getMaxWidth()}
+            ${getHeight()}
+            overflow-hidden
+            transition-all 
+            duration-300 
+            ease-out
+            animate-fadeInScale
+            ${withImage ? 'flex' : 'flex flex-col'}
+          `}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {withImage ? (
+            // Layout con imagen (tablet/laptop)
+            <div className="hidden md:flex w-full h-full">
+              {/* Columna izquierda - Contenido */}
+              <div className="w-[425px] flex flex-col">
+                {/* Header del modal */}
+                {(title || showCloseButton) && (
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                    {title && (
+                      <h2 className="text-xl font-semibold text-gray-900">
+                        {title}
+                      </h2>
+                    )}
+                    {showCloseButton && (
+                      <button
+                        onClick={onClose}
+                        className="
+                          p-2 
+                          text-gray-400 
+                          hover:text-gray-600 
+                          transition-colors 
+                          duration-200 
+                          rounded-full 
+                          hover:bg-gray-100
+                        "
+                        aria-label="Cerrar modal"
+                      >
+                        <svg 
+                          className="w-5 h-5" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M6 18L18 6M6 6l12 12" 
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Contenido scrolleable */}
+                <div className="flex-1 overflow-y-auto">
+                  {children}
+                </div>
+              </div>
+
+              {/* Columna derecha - Imagen */}
+              <div className="flex-1 bg-gray-50 relative overflow-hidden">
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+                  style={{
+                    backgroundImage: "url('/assets/images/login.png')"
+                  }}
+                />
+              </div>
+            </div>
+          ) : (
+            // Layout normal sin imagen
+            <>
+              {/* Header del modal */}
+              {(title || showCloseButton) && (
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                  {title && (
+                    <h2 className="text-xl font-semibold text-gray-900">
+                      {title}
+                    </h2>
+                  )}
+                  {showCloseButton && (
+                    <button
+                      onClick={onClose}
+                      className="
+                        p-2 
+                        text-gray-400 
+                        hover:text-gray-600 
+                        transition-colors 
+                        duration-200 
+                        rounded-full 
+                        hover:bg-gray-100
+                      "
+                      aria-label="Cerrar modal"
+                    >
+                      <svg 
+                        className="w-5 h-5" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M6 18L18 6M6 6l12 12" 
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Contenido del modal */}
+              <div className="p-6">
+                {children}
+              </div>
+            </>
+          )}
+
+          {/* Layout móvil para modales con imagen */}
+          {withImage && (
+            <div className="md:hidden flex flex-col w-full h-full">
               {/* Header del modal */}
               {(title || showCloseButton) && (
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -132,118 +243,10 @@ const Modal = ({
                 {children}
               </div>
             </div>
-            
-            {/* Columna derecha - Imagen */}
-            <div className="w-[425px] relative">
-              <Image
-                src="/assets/images/login.png"
-                alt="Login"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        ) : (
-          // Layout normal sin imagen
-          <>
-            {/* Header del modal */}
-            {(title || showCloseButton) && (
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                {title && (
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {title}
-                  </h2>
-                )}
-                {showCloseButton && (
-                  <button
-                    onClick={onClose}
-                    className="
-                      p-2 
-                      text-gray-400 
-                      hover:text-gray-600 
-                      transition-colors 
-                      duration-200 
-                      rounded-full 
-                      hover:bg-gray-100
-                    "
-                    aria-label="Cerrar modal"
-                  >
-                    <svg 
-                      className="w-5 h-5" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M6 18L18 6M6 6l12 12" 
-                      />
-                    </svg>
-                  </button>
-                )}
-              </div>
-            )}
-            
-            {/* Contenido del modal */}
-            <div className="p-6">
-              {children}
-            </div>
-          </>
-        )}
-
-        {/* Layout móvil para modales con imagen */}
-        {withImage && (
-          <div className="md:hidden flex flex-col w-full h-full">
-            {/* Header del modal */}
-            {(title || showCloseButton) && (
-              <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                {title && (
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {title}
-                  </h2>
-                )}
-                {showCloseButton && (
-                  <button
-                    onClick={onClose}
-                    className="
-                      p-2 
-                      text-gray-400 
-                      hover:text-gray-600 
-                      transition-colors 
-                      duration-200 
-                      rounded-full 
-                      hover:bg-gray-100
-                    "
-                    aria-label="Cerrar modal"
-                  >
-                    <svg 
-                      className="w-5 h-5" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      viewBox="0 0 24 24"
-                    >
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M6 18L18 6M6 6l12 12" 
-                      />
-                    </svg>
-                  </button>
-                )}
-              </div>
-            )}
-            
-            {/* Contenido del modal */}
-            <div className="p-6 flex-1 overflow-y-auto">
-              {children}
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </ClientOnly>
   );
 };
 

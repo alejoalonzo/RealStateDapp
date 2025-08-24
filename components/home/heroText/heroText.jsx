@@ -42,10 +42,10 @@ const HeroText = () => {
           <div className="mt-8">
             <button
               className="group inline-flex items-center gap-3 rounded-full bg-btn-primary text-white px-6 md:px-8 py-4 font-semibold shadow-[0_20px_35px_rgba(0,0,0,0.18)] hover:shadow-[0_25px_45px_rgba(0,0,0,0.22)] transition-all"
-              aria-label="Book my free consultation"
+              aria-label="See property listings"
               style={{ fontFamily: "var(--font-poppins), Poppins, sans-serif" }}
             >
-              Book my free consultation
+              See property listings
               <IoArrowForward className="transition-transform group-hover:translate-x-1" />
             </button>
           </div>

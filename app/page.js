@@ -1,8 +1,13 @@
 import Image from "next/image";
 
 //INTERNAL IMPORTS
-import { Home } from "@/components";
+import { Home, VideoHero } from "@/components";
 
 export default function HomePage() {
-  return <Home />;
+  return (
+    <>
+      <Home />
+      <VideoHero />
+    </>
+  );
 }

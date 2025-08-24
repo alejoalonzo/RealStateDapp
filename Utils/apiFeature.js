@@ -15,6 +15,8 @@ export const CheckIfMetaMaskInstalled = () => {
 
 // Returns the first account from the connected wallet, if not NULL
 export const GetCurrentAccount = async () => {
+  if (typeof window === "undefined") return null;
+
   const { ethereum } = window;
   if (!ethereum) return null;
 
@@ -25,6 +27,8 @@ export const GetCurrentAccount = async () => {
 // Function to check if  the wallet is connected
 export const CheckIfWalletIsConnected = async () => {
   try {
+    if (typeof window === "undefined") return null;
+
     const { ethereum } = window;
 
     if (!ethereum) {
@@ -51,6 +55,8 @@ export const CheckIfWalletIsConnected = async () => {
 // Function to connect the wallet
 export const ConnectWallet = async () => {
   try {
+    if (typeof window === "undefined") return null;
+
     const { ethereum } = window;
 
     if (!ethereum) {
@@ -80,6 +86,8 @@ const FetchContract = signerOrProvider =>
 //Function to connect to the contract
 export const ConnectToContract = async () => {
   try {
+    if (typeof window === "undefined") return null;
+
     const { ethereum } = window;
 
     if (!ethereum) {
