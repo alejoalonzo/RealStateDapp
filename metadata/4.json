@@ -1,0 +1,19 @@
+{
+  "name": "Mediterranean Villa in California",
+  "description": "Beautiful Mediterranean-style villa with pool and garden",
+  "image": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+  "attributes": [
+    {
+      "trait_type": "Bedrooms",
+      "value": 6
+    },
+    {
+      "trait_type": "Price",
+      "value": "$3,800,000"
+    },
+    {
+      "trait_type": "Location",
+      "value": "California"
+    }
+  ]
+}

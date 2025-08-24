@@ -10,13 +10,13 @@ const Home = () => {
       {/* Mobile Layout - Imagen arriba, texto abajo */}
       <ClientOnly fallback={
         <div className="md:hidden">
-          <HeroText />
-          <HeroImage />
+          <HeroImage /><HeroText />
+          
         </div>
       }>
         <div className="md:hidden">
-          <HeroText />
-          <HeroImage />
+          <HeroImage /><HeroText />
+          
         </div>
       </ClientOnly>
       

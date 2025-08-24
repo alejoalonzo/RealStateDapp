@@ -53,6 +53,7 @@ const VideoHero = () => {
 
   return (
     <div 
+      id="video-hero"
       ref={containerRef}
       className="min-h-screen md:flex md:items-center md:justify-center bg-white relative overflow-hidden mt-0 md:mt-0"
     >
@@ -128,14 +129,9 @@ const VideoHero = () => {
 
       {/* Layout para móvil - Video simple sin efecto scroll */}
       <div className="md:hidden w-full px-4 pt-12 pb-8">
-        {/* Texto solo para móvil arriba del video */}
-        <div className="text-center mt-5 mb-6">
-          <p className="text-gray-600 text-lg font-medium">
-            Find the best properties near the area you love. You can enter a City or Zip Code.
-          </p>
-        </div>
+
         
-        <div className="relative w-full shadow-xl rounded-xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+        <div className="relative w-full shadow-xl rounded-xl overflow-hidden" style={{ aspectRatio: '9/16' }}>
           <video
             className="w-full h-full object-cover rounded-xl"
             autoPlay

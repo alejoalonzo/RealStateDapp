@@ -1,0 +1,19 @@
+{
+  "name": "Modern Loft in Chicago",
+  "description": "Converted industrial loft in the heart of the city",
+  "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
+  "attributes": [
+    {
+      "trait_type": "Bedrooms",
+      "value": 2
+    },
+    {
+      "trait_type": "Price",
+      "value": "$1,200,000"
+    },
+    {
+      "trait_type": "Location",
+      "value": "Chicago"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 "use client";
-import { HiMenu } from "react-icons/hi";
 import Image from "next/image";
 import User from "../user/user"; 
+import Menu from "../menu/menu";
 
 const Header = () => {
   return (
@@ -23,14 +23,8 @@ const Header = () => {
         <div className="flex items-center space-x-2 md:space-x-4">
           {/* User Component - ahora incluye dirección y botón de desconectar */}
           <User />
-          {/* Hamburger Menu Icon - Circular Background */}
-          <button 
-            className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:opacity-80 flex-shrink-0"
-            style={{ backgroundColor: '#D6E7EF' }}
-            aria-label="Menú"
-          >
-            <HiMenu className="w-5 h-5 text-text-primary" />
-          </button>
+          {/* Menu Component */}
+          <Menu />
         </div>
       </div>
     </header>
