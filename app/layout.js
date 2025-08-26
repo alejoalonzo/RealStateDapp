@@ -17,10 +17,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body
-        className={`${poppins.variable} font-sans antialiased`}
+        className={`${poppins.variable} font-sans antialiased overflow-x-hidden`}
         suppressHydrationWarning={true}
       >
-        <RealEstateProvider>{children}</RealEstateProvider>
+        <div className="w-full overflow-x-hidden">
+          <RealEstateProvider>{children}</RealEstateProvider>
+        </div>
       </body>
     </html>
   );

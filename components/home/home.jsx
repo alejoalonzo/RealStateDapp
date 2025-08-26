@@ -6,15 +6,15 @@ import ClientOnly from '../ClientOnly';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-bg-primary">
+    <div className="min-h-screen bg-bg-primary w-full overflow-x-hidden">
       {/* Mobile Layout - Imagen arriba, texto abajo */}
       <ClientOnly fallback={
-        <div className="md:hidden">
+        <div className="md:hidden w-full">
           <HeroImage /><HeroText />
           
         </div>
       }>
-        <div className="md:hidden">
+        <div className="md:hidden w-full">
           <HeroImage /><HeroText />
           
         </div>
@@ -22,7 +22,7 @@ const Home = () => {
       
       {/* Tablet y Desktop Layout - Dos columnas 50/50 */}
       <ClientOnly fallback={
-        <div className="hidden md:flex md:h-screen">
+        <div className="hidden md:flex md:h-screen w-full">
           <div className="w-1/2 flex items-center">
             <HeroText />
           </div>
@@ -31,7 +31,7 @@ const Home = () => {
           </div>
         </div>
       }>
-        <div className="hidden md:flex md:h-screen">
+        <div className="hidden md:flex md:h-screen w-full">
           {/* Columna izquierda - Texto Hero */}
           <div className="w-1/2 flex items-center">
             <HeroText />

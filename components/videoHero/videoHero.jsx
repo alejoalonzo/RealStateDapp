@@ -55,7 +55,7 @@ const VideoHero = () => {
     <div 
       id="video-hero"
       ref={containerRef}
-      className="min-h-screen md:flex md:items-center md:justify-center bg-white relative overflow-hidden mt-0 md:mt-0"
+      className="min-h-screen md:flex md:items-center md:justify-center bg-white relative overflow-hidden mt-0 md:mt-0 w-full"
     >
       {/* Solo visible en tablet y desktop */}
       <div className="hidden md:flex w-full h-screen items-center justify-center p-4">
@@ -108,7 +108,7 @@ const VideoHero = () => {
                   <input
                     type="text"
                     placeholder="Enter an address or zip code"
-                    className="w-full px-6 py-4 text-lg text-gray-800 bg-white rounded-full border-0 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/30 transition-all duration-300"
+                    className="w-full px-6 py-4 text-lg text-gray-800 bg-white rounded-full border-0 shadow-lg focus:outline-none focus:ring-4 focus:ring-white/30 transition-all duration-300 max-w-full"
                   />
                 </div>
               </div>
@@ -128,10 +128,10 @@ const VideoHero = () => {
       </div>
 
       {/* Layout para móvil - Video simple sin efecto scroll */}
-      <div className="md:hidden w-full px-4 pt-12 pb-8">
+      <div className="md:hidden w-full px-3 pt-12 pb-8 overflow-x-hidden">
 
         
-        <div className="relative w-full shadow-xl rounded-xl overflow-hidden" style={{ aspectRatio: '9/16' }}>
+        <div className="relative w-full shadow-xl rounded-xl overflow-hidden max-w-full" style={{ aspectRatio: '9/16' }}>
           <video
             className="w-full h-full object-cover rounded-xl"
             autoPlay
@@ -145,16 +145,16 @@ const VideoHero = () => {
           </video>
           
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 flex items-center justify-center rounded-xl">
-            <div className="text-center text-white px-4">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight">
+            <div className="text-center text-white px-3 max-w-full">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight break-words">
                 Explore Properties
                 <span className="block" style={{ color: '#D6E7EF' }}>Exceptional</span>
               </h2>
-              <div className="max-w-xs mx-auto">
+              <div className="max-w-xs mx-auto w-full">
                 <input
                   type="text"
                   placeholder="Enter an address or zip code"
-                  className="w-full px-4 py-2 text-sm text-gray-800 bg-white rounded-full border-0 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300"
+                  className="w-full px-3 py-2 text-sm text-gray-800 bg-white rounded-full border-0 shadow-lg focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-300 max-w-full"
                 />
               </div>
             </div>
