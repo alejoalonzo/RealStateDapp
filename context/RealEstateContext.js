@@ -4,7 +4,13 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ethers } from "ethers";
-import { RealEstateABI, RealEstateAddress } from "@/context/Constants";
+import {
+  RealEstateABI,
+  RealEstateAddress,
+  EscrowAddress,
+  getUserRole,
+  PREDEFINED_ACCOUNTS,
+} from "@/context/Constants";
 
 //INTERNAL IMPORTS
 import {
@@ -23,10 +29,16 @@ export const RealEstateProvider = ({ children }) => {
   // USESTATE -
   const [account, setAccount] = useState("");
   const [userName, setUserName] = useState("");
+  const [userRole, setUserRole] = useState(null); // Nuevo estado para el rol
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [userLoggedOut, setUserLoggedOut] = useState(false); // Flag para logout manual
   const [isClient, setIsClient] = useState(false);
+  const [contracts, setContracts] = useState({
+    realEstate: null,
+    escrow: null,
+    provider: null,
+  }); // Contratos
 
   // Check if we're on the client side
   useEffect(() => {
@@ -42,12 +54,19 @@ export const RealEstateProvider = ({ children }) => {
           // User disconnected all accounts
           setAccount("");
           setUserName("");
+          setUserRole(null);
+          setContracts({ realEstate: null, escrow: null, provider: null });
           console.log("All accounts disconnected");
         } else {
           // User switched to a different account
           const newAccount = accounts[0];
           setAccount(newAccount);
-          console.log("Account switched to:", newAccount);
+          const role = getUserRole(newAccount);
+          setUserRole(role);
+          console.log("Account switched to:", newAccount, "Role:", role);
+
+          // Reconectar contratos con la nueva cuenta
+          initializeContracts(newAccount);
         }
       };
 
@@ -66,6 +85,58 @@ export const RealEstateProvider = ({ children }) => {
     }
   }, []);
 
+  // Función para inicializar contratos
+  const initializeContracts = async accountAddress => {
+    try {
+      if (!accountAddress || !window.ethereum) return;
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // Crear instancias de los contratos
+      const realEstateContract = new ethers.Contract(
+        RealEstateAddress,
+        RealEstateABI,
+        signer
+      );
+
+      // Para Escrow, necesitamos el ABI. Por ahora usamos una versión simplificada
+      const escrowABI = [
+        "function buyer(uint256) view returns (address)",
+        "function seller() view returns (address)",
+        "function inspector() view returns (address)",
+        "function lender() view returns (address)",
+        "function isListed(uint256) view returns (bool)",
+        "function approval(uint256, address) view returns (bool)",
+        "function approveTransaction(uint256)",
+        "function purchasePrice(uint256) view returns (uint256)",
+        "function escrowAmount(uint256) view returns (uint256)",
+        "function depositEarnest(uint256) payable",
+        "function updateInspectionStatus(uint256, bool)",
+        "function finalizeSale(uint256)",
+        "function inspectionIsPassed(uint256) view returns (bool)",
+        "function getBalance() view returns (uint256)",
+        "receive() external payable",
+      ];
+
+      const escrowContract = new ethers.Contract(
+        EscrowAddress,
+        escrowABI,
+        signer
+      );
+
+      setContracts({
+        realEstate: realEstateContract,
+        escrow: escrowContract,
+        provider: provider,
+      });
+
+      console.log("Contracts initialized for account:", accountAddress);
+    } catch (error) {
+      console.error("Error initializing contracts:", error);
+    }
+  };
+
   //FETCH DATA TIME OF THE PAGE LOAD
   // 1) Sólo lee si ya hay wallet conectada (SIN pop-up)
   const checkWallet = async () => {
@@ -82,7 +153,13 @@ export const RealEstateProvider = ({ children }) => {
       }
 
       setAccount(acc);
-      console.log("Wallet connected:", acc);
+      const role = getUserRole(acc);
+      setUserRole(role);
+
+      // Inicializar contratos
+      await initializeContracts(acc);
+
+      console.log("Wallet connected:", acc, "Role:", role);
     } catch (err) {
       console.error("checkWallet error:", err);
       setError("Please install and connect your wallet");
@@ -105,9 +182,15 @@ export const RealEstateProvider = ({ children }) => {
       // Limpiar flag de logout cuando se conecta manualmente
       setUserLoggedOut(false);
       setAccount(acc);
+      const role = getUserRole(acc);
+      setUserRole(role);
+
+      // Inicializar contratos
+      await initializeContracts(acc);
+
       setLoading(false);
 
-      console.log("Wallet connected successfully:", acc);
+      console.log("Wallet connected successfully:", acc, "Role:", role);
     } catch (err) {
       console.error(err);
       setLoading(false);
@@ -121,6 +204,8 @@ export const RealEstateProvider = ({ children }) => {
       setUserLoggedOut(true);
       setAccount("");
       setUserName("");
+      setUserRole(null);
+      setContracts({ realEstate: null, escrow: null, provider: null });
       await ClearWalletConnection();
       console.log("Wallet disconnected");
     } catch (err) {
@@ -181,12 +266,16 @@ export const RealEstateProvider = ({ children }) => {
         updateCurrentAccount,
         account,
         userName,
+        userRole,
+        contracts,
         loading,
         error,
         userLoggedOut,
         isClient,
         createAccount,
         setError,
+        PREDEFINED_ACCOUNTS,
+        getUserRole,
       }}
     >
       {children}

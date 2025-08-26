@@ -1,19 +1,35 @@
 {
-  "name": "Luxury Penthouse in Los Angeles",
-  "description": "Exclusive penthouse with private terrace and panoramic views",
-  "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500",
+  "name": "Industrial Loft in Chicago",
+  "description": "Spacious loft in the artistic district with exposed brick, high ceilings, and modern updates.",
+  "image": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
   "attributes": [
     {
       "trait_type": "Bedrooms",
-      "value": 4
+      "value": 2
+    },
+    {
+      "trait_type": "Bathrooms",
+      "value": 2
     },
     {
       "trait_type": "Price",
-      "value": "$4,200,000"
+      "value": "8 ETH"
+    },
+    {
+      "trait_type": "Square Feet",
+      "value": "1,800"
+    },
+    {
+      "trait_type": "Year Built",
+      "value": "2015"
+    },
+    {
+      "trait_type": "Property Type",
+      "value": "Loft"
     },
     {
       "trait_type": "Location",
-      "value": "Los Angeles"
+      "value": "Chicago, IL"
     }
   ]
 }

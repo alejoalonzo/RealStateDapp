@@ -12,7 +12,7 @@ import property4 from "../../metadata/4.json";
 import property5 from "../../metadata/5.json";
 
 const PropertyPortfolio = () => {
-  // Temporary array with properties
+  // Array completo con las 6 propiedades
   const properties = [property0, property1, property2, property3, property4, property5];
 
   return (
@@ -30,12 +30,16 @@ const PropertyPortfolio = () => {
 
         {/* Property grid - 2 columns on desktop/laptop, 1 on mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 w-full">
-          {properties.map((property, index) => (
-            <CardProperty 
-              key={index} 
-              property={property} 
-            />
-          ))}
+          {properties.map((property, index) => {
+            // Agregar el ID a cada propiedad - Los NFTs empiezan desde ID 0
+            const propertyWithId = { ...property, id: index };
+            return (
+              <CardProperty 
+                key={index} 
+                property={propertyWithId} 
+              />
+            );
+          })}
         </div>
       </div>
     </section>

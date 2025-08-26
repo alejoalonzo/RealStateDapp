@@ -1,19 +1,35 @@
 {
-  "name": "Mediterranean Villa in California",
-  "description": "Beautiful Mediterranean-style villa with pool and garden",
-  "image": "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=500",
+  "name": "Colonial House in Boston",
+  "description": "Elegant historic house in Beacon Hill with original hardwood floors and modern kitchen.",
+  "image": "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=500",
   "attributes": [
     {
       "trait_type": "Bedrooms",
-      "value": 6
+      "value": 4
+    },
+    {
+      "trait_type": "Bathrooms",
+      "value": 3
     },
     {
       "trait_type": "Price",
-      "value": "$3,800,000"
+      "value": "12 ETH"
+    },
+    {
+      "trait_type": "Square Feet",
+      "value": "3,200"
+    },
+    {
+      "trait_type": "Year Built",
+      "value": "1890"
+    },
+    {
+      "trait_type": "Property Type",
+      "value": "Colonial"
     },
     {
       "trait_type": "Location",
-      "value": "California"
+      "value": "Boston, MA"
     }
   ]
 }

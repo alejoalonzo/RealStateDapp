@@ -1,19 +1,35 @@
 {
-  "name": "Apartamento Moderno en NYC",
-  "description": "Penthouse en Manhattan con vista increíble",
+  "name": "Modern Penthouse in NYC",
+  "description": "Stunning penthouse in Manhattan with incredible city views, luxury finishes, and rooftop terrace.",
   "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500",
   "attributes": [
     {
-      "trait_type": "Habitaciones",
+      "trait_type": "Bedrooms",
       "value": 3
     },
     {
-      "trait_type": "Precio",
-      "value": "$3,200,000"
+      "trait_type": "Bathrooms",
+      "value": 3
     },
     {
-      "trait_type": "Ubicación",
-      "value": "Nueva York"
+      "trait_type": "Price",
+      "value": "15 ETH"
+    },
+    {
+      "trait_type": "Square Feet",
+      "value": "2,800"
+    },
+    {
+      "trait_type": "Year Built",
+      "value": "2018"
+    },
+    {
+      "trait_type": "Property Type",
+      "value": "Penthouse"
+    },
+    {
+      "trait_type": "Location",
+      "value": "Manhattan, NY"
     }
   ]
 }

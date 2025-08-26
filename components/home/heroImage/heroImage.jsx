@@ -70,6 +70,7 @@ const HeroImage = () => {
             alt="Hero Image - Real Estate"
             fill
             className="object-cover"
+            sizes="100vw"
             priority
           />
         </div>
@@ -87,6 +88,7 @@ const HeroImage = () => {
           alt="Hero Image - Real Estate"
           fill
           className="object-cover"
+          sizes="100vw"
           priority
         />
 

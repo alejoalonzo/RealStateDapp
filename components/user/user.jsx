@@ -7,7 +7,7 @@ import { Modal, Login } from "../index";
 import { RealEstateContext } from "@/context/RealEstateContext";
 
 const User = () => {
-  const { account, disconnectWallet, loading } = useContext(RealEstateContext);
+  const { account, disconnectWallet, loading, userRole } = useContext(RealEstateContext);
   
   // Estados para controlar los modales
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -46,6 +46,17 @@ const User = () => {
     setShowUserMenu(false);
   };
 
+  // Función para obtener el color del rol
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'seller': return 'text-orange-600 bg-orange-100';
+      case 'buyer': return 'text-blue-600 bg-blue-100';
+      case 'inspector': return 'text-green-600 bg-green-100';
+      case 'lender': return 'text-purple-600 bg-purple-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
   // Función para formatear la dirección de la wallet
   const formatAddress = (address) => {
     if (!address) return "";
@@ -58,6 +69,13 @@ const User = () => {
         {/* Mostrar dirección de wallet si está conectada */}
         {isWalletConnected && (
           <div className="hidden md:flex items-center space-x-3">
+            {/* Mostrar rol del usuario */}
+            {userRole && (
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${getRoleColor(userRole)}`}>
+                {userRole}
+              </span>
+            )}
+            
             <span className="text-sm text-gray-500 font-mono">
               {formatAddress(account)}
             </span>
@@ -97,6 +115,13 @@ const User = () => {
           {/* Menú desplegable del usuario (solo en móvil cuando hay wallet) */}
           {showUserMenu && isWalletConnected && (
             <div className="absolute right-0 top-14 bg-white border border-gray-200 rounded-lg shadow-lg p-3 min-w-[200px] z-50 md:hidden">
+              {userRole && (
+                <div className="mb-2">
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${getRoleColor(userRole)}`}>
+                    {userRole}
+                  </span>
+                </div>
+              )}
               <div className="text-sm text-gray-600 mb-2">Connected:</div>
               <div className="text-xs font-mono text-gray-800 mb-3 break-all">
                 {formatAddress(account)}

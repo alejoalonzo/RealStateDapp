@@ -8,8 +8,8 @@ const tokens = n => {
 };
 
 async function main() {
-  //SET UP ACCOUNT
-  [buyer, seller, inspector, lender] = await ethers.getSigners();
+  //SET UP ACCOUNT - Account #0 = seller, Account #1 = buyer
+  [seller, buyer, inspector, lender] = await ethers.getSigners();
 
   // Get the contract factory we want to deploy
   const RealEstate = await hre.ethers.getContractFactory("RealEstate");
@@ -25,25 +25,82 @@ async function main() {
   //🏠 Información de casas reales (de prueba)
   const casas = [
     {
-      nombre: "Villa de Lujo en Miami",
-      descripcion: "Hermosa villa frente al mar con 5 habitaciones",
+      nombre: "Luxury Villa in Miami",
+      descripcion:
+        "Beautiful oceanfront villa with 5 bedrooms, private pool, and stunning sea views. Modern amenities throughout.",
       foto: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500",
       habitaciones: 5,
-      precio: "$2,500,000",
+      precio: "20 ETH",
+      banos: 4,
+      superficie: "4,500",
+      anoConstructor: "2020",
+      tipoPropiedad: "Villa",
+      ubicacion: "Miami Beach, FL",
     },
     {
-      nombre: "Apartamento Moderno en NYC",
-      descripcion: "Penthouse en Manhattan con vista increíble",
+      nombre: "Modern Penthouse in NYC",
+      descripcion:
+        "Stunning penthouse in Manhattan with incredible city views, luxury finishes, and rooftop terrace.",
       foto: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=500",
       habitaciones: 3,
-      precio: "$3,200,000",
+      precio: "15 ETH",
+      banos: 3,
+      superficie: "2,800",
+      anoConstructor: "2018",
+      tipoPropiedad: "Penthouse",
+      ubicacion: "Manhattan, NY",
     },
     {
-      nombre: "Casa de Campo en Texas",
-      descripcion: "Mansión histórica con 50 acres de terreno",
+      nombre: "Country Estate in Texas",
+      descripcion:
+        "Historic mansion with 50 acres of land, horse stables, and panoramic countryside views.",
       foto: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=500",
       habitaciones: 8,
-      precio: "$1,800,000",
+      precio: "10 ETH",
+      banos: 6,
+      superficie: "8,200",
+      anoConstructor: "1925",
+      tipoPropiedad: "Estate",
+      ubicacion: "Austin, TX",
+    },
+    {
+      nombre: "Industrial Loft in Chicago",
+      descripcion:
+        "Spacious loft in the artistic district with exposed brick, high ceilings, and modern updates.",
+      foto: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=500",
+      habitaciones: 2,
+      precio: "8 ETH",
+      banos: 2,
+      superficie: "1,800",
+      anoConstructor: "2015",
+      tipoPropiedad: "Loft",
+      ubicacion: "Chicago, IL",
+    },
+    {
+      nombre: "Colonial House in Boston",
+      descripcion:
+        "Elegant historic house in Beacon Hill with original hardwood floors and modern kitchen.",
+      foto: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=500",
+      habitaciones: 4,
+      precio: "12 ETH",
+      banos: 3,
+      superficie: "3,200",
+      anoConstructor: "1890",
+      tipoPropiedad: "Colonial",
+      ubicacion: "Boston, MA",
+    },
+    {
+      nombre: "Contemporary Condo in LA",
+      descripcion:
+        "Modern condo with panoramic views, luxury amenities, and prime location in downtown LA.",
+      foto: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=500",
+      habitaciones: 3,
+      precio: "18 ETH",
+      banos: 3,
+      superficie: "2,200",
+      anoConstructor: "2019",
+      tipoPropiedad: "Condo",
+      ubicacion: "Los Angeles, CA",
     },
   ];
 
@@ -67,16 +124,13 @@ async function main() {
       description: casas[i].descripcion,
       image: casas[i].foto,
       attributes: [
-        { trait_type: "Habitaciones", value: casas[i].habitaciones },
-        { trait_type: "Precio", value: casas[i].precio },
-        {
-          trait_type: "Ubicación",
-          value: casas[i].nombre.includes("Miami")
-            ? "Miami"
-            : casas[i].nombre.includes("NYC")
-            ? "Nueva York"
-            : "Texas",
-        },
+        { trait_type: "Bedrooms", value: casas[i].habitaciones },
+        { trait_type: "Bathrooms", value: casas[i].banos },
+        { trait_type: "Price", value: casas[i].precio },
+        { trait_type: "Square Feet", value: casas[i].superficie },
+        { trait_type: "Year Built", value: casas[i].anoConstructor },
+        { trait_type: "Property Type", value: casas[i].tipoPropiedad },
+        { trait_type: "Location", value: casas[i].ubicacion },
       ],
     };
 
@@ -142,7 +196,24 @@ async function main() {
     .list(mintedTokenIds[2], buyer.address, tokens(10), tokens(3));
   await transaction.wait();
 
+  // Listar las 3 propiedades adicionales
+  transaction = await escrow
+    .connect(seller)
+    .list(mintedTokenIds[3], buyer.address, tokens(8), tokens(2));
+  await transaction.wait();
+  transaction = await escrow
+    .connect(seller)
+    .list(mintedTokenIds[4], buyer.address, tokens(12), tokens(4));
+  await transaction.wait();
+  transaction = await escrow
+    .connect(seller)
+    .list(mintedTokenIds[5], buyer.address, tokens(18), tokens(6));
+  await transaction.wait();
+
   console.log("Escrow deployed to:", await escrow.getAddress());
+  console.log(
+    `\n🏠 ${casas.length} propiedades listadas en el contrato Escrow`
+  );
 }
 
 // Run the main function and handle errors

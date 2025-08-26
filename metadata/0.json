@@ -1,19 +1,35 @@
 {
-  "name": "Villa de Lujo en Miami",
-  "description": "Hermosa villa frente al mar con 5 habitaciones",
+  "name": "Luxury Villa in Miami",
+  "description": "Beautiful oceanfront villa with 5 bedrooms, private pool, and stunning sea views. Modern amenities throughout.",
   "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=500",
   "attributes": [
     {
-      "trait_type": "Habitaciones",
+      "trait_type": "Bedrooms",
       "value": 5
     },
     {
-      "trait_type": "Precio",
-      "value": "$2,500,000"
+      "trait_type": "Bathrooms",
+      "value": 4
     },
     {
-      "trait_type": "Ubicación",
-      "value": "Miami"
+      "trait_type": "Price",
+      "value": "20 ETH"
+    },
+    {
+      "trait_type": "Square Feet",
+      "value": "4,500"
+    },
+    {
+      "trait_type": "Year Built",
+      "value": "2020"
+    },
+    {
+      "trait_type": "Property Type",
+      "value": "Villa"
+    },
+    {
+      "trait_type": "Location",
+      "value": "Miami Beach, FL"
     }
   ]
 }
