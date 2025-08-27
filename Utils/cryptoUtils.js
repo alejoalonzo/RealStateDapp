@@ -23,6 +23,23 @@ export const extractPriceValue = priceString => {
 };
 
 /**
+ * Extrae el valor numérico de un string que ya está en ETH
+ * @param {string} priceString - Precio en formato "20 ETH" o similar
+ * @returns {number} - Valor numérico en ETH
+ */
+export const extractETHValue = priceString => {
+  if (!priceString || typeof priceString !== "string") return 0;
+
+  // Buscar patrón de número seguido de ETH/eth
+  const ethMatch = priceString.match(/(\d+(?:\.\d+)?)\s*ETH/i);
+  if (ethMatch) {
+    return parseFloat(ethMatch[1]);
+  }
+
+  return 0;
+};
+
+/**
  * Convierte USD a Ethereum
  * @param {number} usdAmount - Cantidad en USD
  * @returns {string} - Cantidad formateada en ETH
@@ -49,6 +66,45 @@ export const convertToBTC = usdAmount => {
  * @returns {object} - Objeto con precios formateados
  */
 export const formatCryptoPrice = (priceString, cryptoType = "ETH") => {
+  if (!priceString || typeof priceString !== "string") {
+    return {
+      crypto: `0 ${cryptoType}`,
+      usd: "$0",
+      cryptoValue: 0,
+      usdValue: 0,
+    };
+  }
+
+  // Verificar si el precio ya está en ETH
+  const ethValue = extractETHValue(priceString);
+
+  if (ethValue > 0) {
+    // El precio ya está en ETH, calcular USD equivalente
+    const usdValue = ethValue * CRYPTO_PRICES.ETH;
+    const formattedUSD = `$${usdValue.toLocaleString("en-US", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
+
+    if (cryptoType === "BTC") {
+      const btcAmount = convertToBTC(usdValue);
+      return {
+        crypto: `${btcAmount} BTC`,
+        usd: formattedUSD,
+        cryptoValue: parseFloat(btcAmount),
+        usdValue: usdValue,
+      };
+    } else {
+      return {
+        crypto: `${ethValue} ETH`,
+        usd: formattedUSD,
+        cryptoValue: ethValue,
+        usdValue: usdValue,
+      };
+    }
+  }
+
+  // Si no está en ETH, asumir que está en USD y convertir
   const usdValue = extractPriceValue(priceString);
 
   if (usdValue === 0) {
@@ -108,6 +164,7 @@ export const PriceDisplay = ({
 
 export default {
   extractPriceValue,
+  extractETHValue,
   convertToETH,
   convertToBTC,
   formatCryptoPrice,

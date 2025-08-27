@@ -10,6 +10,7 @@ import CardProperty from "./cardProperty/cardProperty.jsx";
 import PropertyDetail from "./propertyDetail/propertyDetail.jsx";
 import Footer from "./footer/footer.jsx";
 import Menu from "./menu/menu.jsx";
+import Stepper from "./stepper/stepper.jsx";
 
 export {
   Home,
@@ -24,4 +25,5 @@ export {
   PropertyDetail,
   Footer,
   Menu,
+  Stepper,
 };
