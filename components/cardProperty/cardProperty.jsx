@@ -28,7 +28,7 @@ const CardProperty = ({ property }) => {
   }
 
   return (
-    <div className="group relative bg-white rounded-lg md:rounded-[28px] lg:rounded-[36px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer w-full max-w-full" style={{ aspectRatio: '1 / 0.8' }}>
+    <div className="group relative bg-white rounded-lg md:rounded-[28px] lg:rounded-[36px] overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 w-full max-w-full" style={{ aspectRatio: '1 / 0.8' }}>
       {/* Property image - fills entire card */}
       <div className="relative w-full h-full bg-gray-200 overflow-hidden">
         {!imageError ? (
@@ -62,7 +62,7 @@ const CardProperty = ({ property }) => {
         
         {/* Action button - always visible in top right */}
         <div className="absolute top-6 right-6 z-20">
-          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 group flex-shrink-0" onClick={() => togglePop(property)}>
+          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 group flex-shrink-0 cursor-pointer" onClick={() => togglePop(property)}>
             <svg 
               className="w-5 h-5 text-gray-800 transition-transform duration-300 group-hover:rotate-12" 
               fill="none" 

@@ -713,20 +713,48 @@ const PropertyDetail = ({ property, togglePop }) => {
                             <span>{hasLended ? 'Lending Approved' : 'Approve and Lend'}</span>
                           </button>
                         ) : userRole === 'seller' ? (
-                          <button
-                            onClick={handleApproveSell}
-                            disabled={hasSold}
-                            className={`w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
-                              hasSold 
-                                ? 'bg-green-500 text-white cursor-not-allowed' 
-                                : 'bg-orange-600 hover:bg-orange-700 text-white'
-                            }`}
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                            </svg>
-                            <span>{hasSold ? 'Sale Approved' : 'Approve and Sell'}</span>
-                          </button>
+                          <>
+                            {!hasInspected || !hasLended ? (
+                              // Seller no puede aprobar hasta que inspector y lender hayan aprobado
+                              <div className="space-y-3">
+                                <button
+                                  disabled={true}
+                                  className="w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 bg-gray-300 text-gray-500 cursor-not-allowed"
+                                >
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                  </svg>
+                                  <span>Waiting for Approvals</span>
+                                </button>
+                                <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                                  <p className="text-sm text-amber-800 font-medium mb-2">Pending Approvals Required:</p>
+                                  <ul className="text-sm text-amber-700 space-y-1">
+                                    {!hasInspected && <li>• Inspector approval pending</li>}
+                                    {!hasLended && <li>• Lender approval pending</li>}
+                                  </ul>
+                                  <p className="text-xs text-amber-600 mt-2">
+                                    You can approve the sale once both inspector and lender have completed their processes.
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              // Seller puede aprobar ahora
+                              <button
+                                onClick={handleApproveSell}
+                                disabled={hasSold}
+                                className={`w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
+                                  hasSold 
+                                    ? 'bg-green-500 text-white cursor-not-allowed' 
+                                    : 'bg-orange-600 hover:bg-orange-700 text-white'
+                                }`}
+                              >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                                <span>{hasSold ? 'Sale Approved' : 'Approve and Sell'}</span>
+                              </button>
+                            )}
+                          </>
                         ) : (
                           // Comprador por defecto
                           <>
