@@ -1,6 +1,9 @@
 "use client";
 
 import { IoArrowForward } from "react-icons/io5";
+import Image from "next/image";
+import User from "../../user/user.jsx"; 
+import Menu from "../../menu/menu.jsx";
 
 const HeroText = () => {
   const scrollToPropertyPortfolio = () => {
@@ -15,6 +18,31 @@ const HeroText = () => {
 
   return (
     <div className="w-full h-screen md:h-full flex flex-col px-4 md:px-8 lg:px-12 max-w-full overflow-x-hidden">
+      {/* Header integrado - solo visible en el área de heroText */}
+      <header className="bg-bg-primary border-b border-gray-100 py-2 lg:py-3 relative mb-4">
+        <div className="flex items-center justify-between max-w-full">
+          {/* Logo */}
+          <div className="flex items-center flex-shrink-0">
+            <Image
+              src="/assets/images/logo.png"
+              alt="Real Estate DApp Logo"
+              width={100}
+              height={100}
+              className="w-[55px] h-[55px] sm:w-[65px] sm:h-[65px] lg:w-[100px] lg:h-[100px] object-contain"
+              priority
+            />
+          </div>
+
+          {/* Icons Container */}
+          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4 flex-shrink-0">
+            {/* User Component */}
+            <User />
+            {/* Menu Component */}
+            <Menu />
+          </div>
+        </div>
+      </header>
+
       {/* Contenido principal - Centrado verticalmente */}
       <div className="flex-1 flex flex-col justify-center max-w-full">;
         <div className="max-w-2xl lg:max-w-xl xl:max-w-2xl lg:pr-8 xl:pr-12 w-full">
