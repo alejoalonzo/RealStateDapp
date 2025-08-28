@@ -60,11 +60,9 @@ const nextConfig = {
   // Configuración experimental
   experimental: {
     optimizePackageImports: ["react", "react-dom"],
-    esmExternals: "loose",
   },
   // Configuración de compilación
   transpilePackages: ["ethers"],
-  swcMinify: true,
 };
 
 export default nextConfig;

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import User from "../user/user"; 
-import Menu from "../menu/menu";
+import User from "../user/user.jsx"; 
+import Menu from "../menu/menu.jsx";
 
 const Header = () => {
   return (

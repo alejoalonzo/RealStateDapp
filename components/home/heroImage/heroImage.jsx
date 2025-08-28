@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
 import { IoShare, IoHeartOutline, IoHeart } from "react-icons/io5";
-import { Modal } from "../../index";
+import Modal from "../../modal/modal.jsx";
 import { RealEstateContext } from "@/context/RealEstateContext";
 
 const HeroImage = () => {
