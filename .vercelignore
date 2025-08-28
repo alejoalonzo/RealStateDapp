@@ -1,0 +1,22 @@
+# Hardhat files
+
+artifacts/
+cache/
+contracts/
+scripts/
+test/
+hardhat.config.js
+ignition/
+
+# Development files
+
+.vscode/
+HYDRATION_FIXES.md
+
+# Dependencies
+
+node_modules/
+
+# Build files
+
+.next/
