@@ -4,5 +4,9 @@
   "javascript.preferences.includePackageJsonAutoImports": "off",
   "javascript.suggest.autoImports": false,
   "typescript.validate.enable": false,
-  "javascript.validate.enable": true
+  "javascript.validate.enable": true,
+  "json.validate.enable": true,
+  "files.associations": {
+    "jsconfig.json": "jsonc"
+  }
 }
