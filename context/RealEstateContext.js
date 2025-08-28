@@ -1,27 +1,23 @@
 "use client";
-// ...existing code...
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ethers } from "ethers";
-import {
-  RealEstateABI,
-  RealEstateAddress,
-  EscrowAddress,
-  getUserRole,
-  PREDEFINED_ACCOUNTS,
-} from "@/context/Constants";
 
-//INTERNAL IMPORTS
-import {
-  GetCurrentAccount,
-  CheckIfWalletIsConnected,
-  ConnectWallet,
-  ConnectToContract,
-  ConvertTime,
-  ClearWalletConnection,
-  RequestWalletDisconnect,
-} from "@/Utils/apiFeature";
+// Dynamic imports para evitar errores en build
+let ethers;
+let Constants;
+let apiFeature;
+
+// Verificar si estamos en el cliente antes de importar ethers
+if (typeof window !== "undefined") {
+  try {
+    ethers = require("ethers");
+    Constants = require("@/context/Constants");
+    apiFeature = require("@/Utils/apiFeature");
+  } catch (error) {
+    console.warn("Blockchain dependencies not available:", error);
+  }
+}
 
 export const RealEstateContext = React.createContext();
 
@@ -40,12 +36,27 @@ export const RealEstateProvider = ({ children }) => {
     provider: null,
   }); // Contratos
 
+  // Check if blockchain dependencies are available
+  const isBlockchainAvailable = () => {
+    return typeof window !== "undefined" && ethers && Constants && apiFeature;
+  };
+
   // Check if we're on the client side
   useEffect(() => {
     setIsClient(true);
-    // Check wallet connection on load
-    checkWallet();
 
+    // Only check wallet if blockchain dependencies are available
+    if (isBlockchainAvailable()) {
+      checkWallet();
+      setupMetaMaskListeners();
+    } else {
+      console.log(
+        "Blockchain dependencies not available - running in demo mode"
+      );
+    }
+  }, []);
+
+  const setupMetaMaskListeners = () => {
     // Setup MetaMask account change listener
     if (typeof window !== "undefined" && window.ethereum) {
       const handleAccountsChanged = accounts => {
@@ -61,7 +72,9 @@ export const RealEstateProvider = ({ children }) => {
           // User switched to a different account
           const newAccount = accounts[0];
           setAccount(newAccount);
-          const role = getUserRole(newAccount);
+          const role = Constants?.getUserRole
+            ? Constants.getUserRole(newAccount)
+            : null;
           setUserRole(role);
           console.log("Account switched to:", newAccount, "Role:", role);
 
@@ -83,20 +96,20 @@ export const RealEstateProvider = ({ children }) => {
         }
       };
     }
-  }, []);
+  };
 
   // Función para inicializar contratos
   const initializeContracts = async accountAddress => {
     try {
-      if (!accountAddress || !window.ethereum) return;
+      if (!accountAddress || !window.ethereum || !ethers || !Constants) return;
 
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
       // Crear instancias de los contratos
       const realEstateContract = new ethers.Contract(
-        RealEstateAddress,
-        RealEstateABI,
+        Constants.RealEstateAddress,
+        Constants.RealEstateABI,
         signer
       );
 
@@ -120,7 +133,7 @@ export const RealEstateProvider = ({ children }) => {
       ];
 
       const escrowContract = new ethers.Contract(
-        EscrowAddress,
+        Constants.EscrowAddress,
         escrowABI,
         signer
       );
@@ -141,19 +154,24 @@ export const RealEstateProvider = ({ children }) => {
   // 1) Sólo lee si ya hay wallet conectada (SIN pop-up)
   const checkWallet = async () => {
     try {
+      if (!isBlockchainAvailable()) {
+        console.log("Blockchain not available, skipping wallet check");
+        return;
+      }
+
       // Si el usuario hizo logout manual, no reconectar automáticamente
       if (userLoggedOut) {
         console.log("User logged out manually, skipping auto-reconnect");
         return;
       }
 
-      const acc = await GetCurrentAccount();
+      const acc = await apiFeature.GetCurrentAccount();
       if (!acc) {
         return;
       }
 
       setAccount(acc);
-      const role = getUserRole(acc);
+      const role = Constants.getUserRole ? Constants.getUserRole(acc) : null;
       setUserRole(role);
 
       // Inicializar contratos
@@ -169,10 +187,15 @@ export const RealEstateProvider = ({ children }) => {
   // 2) Llamada explícita desde el botón (CON pop-up)
   const connectWallet = async () => {
     try {
+      if (!isBlockchainAvailable()) {
+        setError("Blockchain functionality not available");
+        return;
+      }
+
       setLoading(true);
       setError("");
 
-      const acc = await ConnectWallet(); // Abre MetaMask
+      const acc = await apiFeature.ConnectWallet(); // Abre MetaMask
 
       if (!acc) {
         setLoading(false);
@@ -182,7 +205,7 @@ export const RealEstateProvider = ({ children }) => {
       // Limpiar flag de logout cuando se conecta manualmente
       setUserLoggedOut(false);
       setAccount(acc);
-      const role = getUserRole(acc);
+      const role = Constants.getUserRole ? Constants.getUserRole(acc) : null;
       setUserRole(role);
 
       // Inicializar contratos
@@ -206,7 +229,11 @@ export const RealEstateProvider = ({ children }) => {
       setUserName("");
       setUserRole(null);
       setContracts({ realEstate: null, escrow: null, provider: null });
-      await ClearWalletConnection();
+
+      if (apiFeature?.ClearWalletConnection) {
+        await apiFeature.ClearWalletConnection();
+      }
+
       console.log("Wallet disconnected");
     } catch (err) {
       console.error("Error disconnecting wallet:", err);
@@ -216,7 +243,9 @@ export const RealEstateProvider = ({ children }) => {
   // Function to update account (for manual refresh)
   const updateCurrentAccount = async () => {
     try {
-      const acc = await GetCurrentAccount();
+      if (!isBlockchainAvailable()) return;
+
+      const acc = await apiFeature.GetCurrentAccount();
       if (acc && acc !== account) {
         setAccount(acc);
         console.log("Account updated to:", acc);
@@ -229,6 +258,11 @@ export const RealEstateProvider = ({ children }) => {
   //CREATE AN ACCOUNT
   const createAccount = async ({ userName }) => {
     try {
+      if (!isBlockchainAvailable()) {
+        setError("Blockchain functionality not available");
+        return;
+      }
+
       //check if username is provided
       if (!userName) {
         setError("Please provide username");
@@ -236,7 +270,7 @@ export const RealEstateProvider = ({ children }) => {
       }
 
       console.log("CreateAccount: Starting account creation for:", userName);
-      const contract = await ConnectToContract();
+      const contract = await apiFeature.ConnectToContract();
       const getCreatedUser = await contract.createAccount(userName);
       setLoading(true);
       await getCreatedUser.wait();
@@ -260,7 +294,8 @@ export const RealEstateProvider = ({ children }) => {
   return (
     <RealEstateContext.Provider
       value={{
-        CheckIfWalletIsConnected,
+        CheckIfWalletIsConnected:
+          apiFeature?.CheckIfWalletIsConnected || (() => false),
         connectWallet,
         disconnectWallet,
         updateCurrentAccount,
@@ -274,8 +309,9 @@ export const RealEstateProvider = ({ children }) => {
         isClient,
         createAccount,
         setError,
-        PREDEFINED_ACCOUNTS,
-        getUserRole,
+        PREDEFINED_ACCOUNTS: Constants?.PREDEFINED_ACCOUNTS || [],
+        getUserRole: Constants?.getUserRole || (() => null),
+        isBlockchainAvailable: isBlockchainAvailable(),
       }}
     >
       {children}
