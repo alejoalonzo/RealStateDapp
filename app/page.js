@@ -1,8 +1,13 @@
 import Image from "next/image";
 
 //INTERNAL IMPORTS
-import { Home, VideoHero, PropertyPortfolio, Footer } from "@/components";
-import Header from "@/components/header/header.jsx";
+import {
+  Home,
+  VideoHero,
+  PropertyPortfolio,
+  Footer,
+  Header,
+} from "@/components";
 
 export default function HomePage() {
   return (
