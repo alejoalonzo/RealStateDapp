@@ -18,7 +18,7 @@ const Footer = () => {
               Blockchain Real Estate
             </h2>
             <p className="text-gray-300 mb-6 max-w-md leading-relaxed break-words">
-              Revolutionizing real estate through blockchain technology. Secure, transparent, and efficient property transactions for the modern world.
+              Revolutionizing real estate through blockchain technology. Secure, transparent, and efficient property transactions for the modern digital world.
             </p>
             <div className="flex space-x-4">
               {/* Social Media Icons */}
