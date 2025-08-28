@@ -20,7 +20,6 @@
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^6.1.0",
     "@tailwindcss/postcss": "^4",
-    "@types/minimatch": "^6.0.0",
     "hardhat": "^2.26.1",
     "tailwindcss": "^4"
   }
