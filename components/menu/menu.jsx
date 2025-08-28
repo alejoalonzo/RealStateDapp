@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { IoMenu, IoClose, IoHome, IoSearch, IoGrid, IoMail, IoWallet } from "react-icons/io5";
-import { Modal } from "../index";
+import Modal from "../modal/modal";
 import { RealEstateContext } from "@/context/RealEstateContext";
 
 const Menu = () => {

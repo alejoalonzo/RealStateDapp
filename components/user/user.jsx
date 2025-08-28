@@ -3,7 +3,8 @@ import { FaUser } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import Image from "next/image";
 import { useState, useContext } from "react";
-import { Modal, Login } from "../index";
+import Modal from "../modal/modal";
+import Login from "../login/login";
 import { RealEstateContext } from "@/context/RealEstateContext";
 
 const User = () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { IoArrowForward } from "react-icons/io5";
-import { Header } from '@/components';
+import Header from '../../header/header';
 
 const HeroText = () => {
   const scrollToPropertyPortfolio = () => {
