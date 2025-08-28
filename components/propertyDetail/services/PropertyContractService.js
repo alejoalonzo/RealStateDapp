@@ -65,7 +65,9 @@ export class PropertyContractService {
       .approveTransaction(propertyId);
     await transaction.wait();
 
-    console.log("🎉 Purchase completed successfully!");
+    console.log(
+      "✅ Earnest deposit + buyer approval done. Waiting for lender/inspector/seller."
+    );
     return true;
   }
 
@@ -142,18 +144,24 @@ export class PropertyContractService {
       .approveTransaction(propertyId);
     await transaction.wait();
 
-    // Intentar finalizar la venta
-    try {
-      const finalizeTransaction = await this.contracts.escrow
-        .connect(signer)
-        .finalizeSale(propertyId);
-      await finalizeTransaction.wait();
-      console.log("🎉 Sale finalized successfully");
-    } catch (finalizeError) {
-      console.log("⏳ Cannot finalize yet - waiting for other approvals");
-    }
+    console.log("🎉 Sale approved successfully - ready for finalization");
+    return true;
+  }
 
-    console.log("🎉 Sale approved successfully");
+  async finalizeSale(propertyId) {
+    await this.validateContract();
+
+    console.log("🏁 Finalizing sale for property ID:", propertyId);
+
+    const signer = await this.contracts.provider.getSigner();
+
+    // Finalizar la venta
+    const transaction = await this.contracts.escrow
+      .connect(signer)
+      .finalizeSale(propertyId);
+    await transaction.wait();
+
+    console.log("🎉 Sale finalized successfully - NFT transferred to buyer!");
     return true;
   }
 }

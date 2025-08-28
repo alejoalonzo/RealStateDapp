@@ -32,6 +32,20 @@ const Menu = () => {
     }
   }, [isOpen, isMobile]);
 
+  // Cerrar dropdown en desktop al hacer clic fuera o ESC
+  useEffect(() => {
+    if (isOpen && !isMobile) {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+        }
+      };
+      
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, isMobile]);
+
   // Funciones de navegación
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -133,32 +147,43 @@ const Menu = () => {
 
         {/* Desktop Dropdown Menu */}
         {!isMobile && isOpen && (
-          <div 
-            className="absolute top-full right-0 mt-2 w-64 rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50"
-            style={{ backgroundColor: '#ffffff' }}
-          >
-            <div className="p-2">
-              {menuItems.map((item, index) => (
-                <button
-                  key={item.id}
-                  onClick={item.action}
-                  className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group"
-                  style={{ 
-                    color: '#151515',
-                    ':hover': { backgroundColor: '#F7F6F1' }
-                  }}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#F7F6F1'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                >
-                  <item.icon 
-                    size={18} 
-                    className="text-gray-600 group-hover:text-gray-800 transition-colors duration-200" 
-                  />
-                  <span className="font-medium">{item.label}</span>
-                </button>
-              ))}
+          <>
+            {/* Overlay para cerrar el menú */}
+            <div 
+              className="fixed inset-0" 
+              style={{ zIndex: 9998 }}
+              onClick={() => setIsOpen(false)}
+            />
+            <div 
+              className="absolute top-full right-0 mt-2 w-64 rounded-2xl shadow-xl border border-gray-100 overflow-hidden max-h-96"
+              style={{ 
+                backgroundColor: '#ffffff',
+                zIndex: 9999
+              }}
+            >
+              <div className="p-2">
+                {menuItems.map((item, index) => (
+                  <button
+                    key={item.id}
+                    onClick={item.action}
+                    className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group"
+                    style={{ 
+                      color: '#151515',
+                      ':hover': { backgroundColor: '#F7F6F1' }
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#F7F6F1'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                  >
+                    <item.icon 
+                      size={18} 
+                      className="text-gray-600 group-hover:text-gray-800 transition-colors duration-200" 
+                    />
+                    <span className="font-medium">{item.label}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
 
@@ -167,18 +192,22 @@ const Menu = () => {
         <>
           {/* Backdrop */}
           <div 
-            className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+            className={`fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
               isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
             }`}
+            style={{ zIndex: 9998 }}
             onClick={() => setIsOpen(false)}
           />
 
           {/* Side Menu */}
           <div 
-            className={`fixed top-0 right-0 h-full w-80 z-50 transition-transform duration-300 ease-out ${
+            className={`fixed top-0 right-0 h-full w-80 transition-transform duration-300 ease-out ${
               isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}
-            style={{ backgroundColor: '#ffffff' }}
+            style={{ 
+              backgroundColor: '#ffffff',
+              zIndex: 9999
+            }}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100">

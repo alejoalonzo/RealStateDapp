@@ -303,7 +303,7 @@ const PropertyDetail = ({ property, togglePop }) => {
 
       setHasBought(true);
       
-      console.log('🎉 Purchase completed successfully!');
+      console.log('✅ Earnest deposit + buyer approval done. Waiting for lender/inspector/seller.');
       // Remover el alert y solo hacer console.log para mejor UX
       console.log(`Purchase initiated successfully for ${property.name}! Waiting for other parties to approve.`);
       
@@ -398,29 +398,48 @@ const PropertyDetail = ({ property, togglePop }) => {
 
       console.log('Approving sale for property ID:', property.id);
       
-      // Lógica para aprobar y vender
+      // Lógica para aprobar la venta
       const signer = await contracts.provider.getSigner();
       
       // Aprobar la transacción como seller
       const transactions = await contracts.escrow.connect(signer).approveTransaction(property.id);
       await transactions.wait();
 
-      //seller finalize (esto solo funciona si todas las aprobaciones están completas)
-      try {
-        const finalizeTransaction = await contracts.escrow.connect(signer).finalizeSale(property.id);
-        await finalizeTransaction.wait();
-        console.log('Sale finalized successfully');
-      } catch (finalizeError) {
-        console.log('Cannot finalize yet - waiting for other approvals');
-      }
-
       setHasSold(true);
 
-      console.log('Approving sale for property:', property.name);
-      alert('Sale approved successfully!');
+      console.log('Sale approved for property:', property.name);
+      alert('Sale approved successfully! You can now finalize the sale.');
     } catch (error) {
       console.error('Error approving sale:', error);
       alert(`Error approving sale: ${error.message}`);
+    }
+  };
+
+  const handleFinalizeSale = async () => {
+    try {
+      // Validar que los contratos estén disponibles
+      if (!contracts.escrow || !contracts.provider) {
+        alert('Smart contracts not available');
+        return;
+      }
+
+      console.log('Finalizing sale for property ID:', property.id);
+      
+      const signer = await contracts.provider.getSigner();
+      
+      // Finalizar la venta
+      const finalizeTransaction = await contracts.escrow.connect(signer).finalizeSale(property.id);
+      await finalizeTransaction.wait();
+      
+      console.log('🎉 Sale finalized successfully! NFT transferred to buyer.');
+      alert('Sale finalized successfully! Property ownership has been transferred.');
+      
+      // Actualizar el estado para reflejar que la propiedad ya no está listada
+      fetchOwner(); // Re-fetch para actualizar el owner
+      
+    } catch (error) {
+      console.error('Error finalizing sale:', error);
+      alert(`Error finalizing sale: ${error.message}`);
     }
   };
 
@@ -739,20 +758,31 @@ const PropertyDetail = ({ property, togglePop }) => {
                               </div>
                             ) : (
                               // Seller puede aprobar ahora
-                              <button
-                                onClick={handleApproveSell}
-                                disabled={hasSold}
-                                className={`w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl ${
-                                  hasSold 
-                                    ? 'bg-green-500 text-white cursor-not-allowed' 
-                                    : 'bg-orange-600 hover:bg-orange-700 text-white'
-                                }`}
-                              >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                                </svg>
-                                <span>{hasSold ? 'Sale Approved' : 'Approve and Sell'}</span>
-                              </button>
+                              <>
+                                {!hasSold ? (
+                                  // Botón para aprobar la venta
+                                  <button
+                                    onClick={handleApproveSell}
+                                    className="w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl bg-orange-600 hover:bg-orange-700 text-white"
+                                  >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                    </svg>
+                                    <span>Approve Sale</span>
+                                  </button>
+                                ) : (
+                                  // Botón para finalizar la venta
+                                  <button
+                                    onClick={handleFinalizeSale}
+                                    className="w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl bg-green-600 hover:bg-green-700 text-white"
+                                  >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>Finalize Sale</span>
+                                  </button>
+                                )}
+                              </>
                             )}
                           </>
                         ) : (

@@ -5,7 +5,7 @@ import Menu from "../menu/menu";
 
 const Header = () => {
   return (
-    <header className="w-full bg-bg-primary border-b border-gray-100 py-2 lg:py-4 overflow-x-hidden">
+    <header className="w-full bg-bg-primary border-b border-gray-100 py-2 lg:py-4 relative">
       <div className="flex items-center justify-between px-3 sm:px-4 lg:px-6 max-w-full">
         {/* Logo */}
         <div className="flex items-center flex-shrink-0">
