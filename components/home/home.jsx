@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-import HeroText from './heroText/heroText';
-import HeroImage from './heroImage/heroImage';
-import ClientOnly from '../ClientOnly';
+import HeroText from './heroText/heroText.jsx';
+import HeroImage from './heroImage/heroImage.jsx';
+import ClientOnly from '../ClientOnly.jsx';
 
 const Home = () => {
   return (
