@@ -3,10 +3,16 @@ import Image from "next/image";
 import HeroText from './heroText/heroText.jsx';
 import HeroImage from './heroImage/heroImage.jsx';
 import ClientOnly from '../ClientOnly.jsx';
+import Header from '../header/header.jsx';
 
 const Home = () => {
   return (
     <div className="min-h-screen bg-bg-primary w-full overflow-x-hidden">
+      {/* Header - Visible en todas las versiones */}
+      <div className="w-full absolute top-0 left-0 right-0 z-30">
+        <Header />
+      </div>
+
       {/* Mobile Layout - Imagen arriba, texto abajo */}
       <ClientOnly fallback={
         <div className="md:hidden w-full">

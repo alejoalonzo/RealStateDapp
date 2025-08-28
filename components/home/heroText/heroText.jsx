@@ -1,7 +1,6 @@
 "use client";
 
 import { IoArrowForward } from "react-icons/io5";
-import { Header } from "../../index";
 
 const HeroText = () => {
   const scrollToPropertyPortfolio = () => {
@@ -16,13 +15,8 @@ const HeroText = () => {
 
   return (
     <div className="w-full h-screen md:h-full flex flex-col px-4 md:px-8 lg:px-12 max-w-full overflow-x-hidden">
-      {/* Header Component - En el top */}
-      <div className="w-full">
-         <Header />
-      </div>
-     
       {/* Contenido principal - Centrado verticalmente */}
-      <div className="flex-1 flex flex-col justify-center max-w-full">
+      <div className="flex-1 flex flex-col justify-center max-w-full">;
         <div className="max-w-2xl lg:max-w-xl xl:max-w-2xl lg:pr-8 xl:pr-12 w-full">
           {/* Badge / Pill */}
           <div className="inline-flex items-center gap-2 rounded-full bg-white/80 ring-1 ring-black/10 px-3.5 py-1.5 text-xs md:text-sm text-[#1e2d25] backdrop-blur max-w-full">
